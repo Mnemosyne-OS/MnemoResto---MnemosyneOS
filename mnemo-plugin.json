@@ -1,0 +1,35 @@
+{
+  "name": "@mnemosyne-plugins/mnemo-resto",
+  "displayName": "MnemoResto",
+  "version": "2.0.0",
+  "vendor": "Mnemosyne Labs",
+  "category": "Productivity",
+  "keywords": [
+    "restaurant",
+    "pos",
+    "crm",
+    "loyalty",
+    "reservations",
+    "tips",
+    "menu"
+  ],
+  "description": "MnemoResto — le restaurant qui n'oublie aucun client. Tableau de bord, plan de salle, réservations, CRM avec fidélité, serveurs et pourboires, menu, formules, TVA par produit, stock, caisse et facturation. Interface EN/FR/ES synchronisée avec Mnemosyne OS.",
+  "permissions": [
+    "vault:read",
+    "vault:write",
+    "model:infer"
+  ],
+  "updateStrategy": "git",
+  "entrypoints": {
+    "renderer": "index.html"
+  },
+  "widgets": [
+    {
+      "id": "mnemo-resto-main",
+      "name": "MnemoResto",
+      "route": "index.html",
+      "defaultWidth": 1000,
+      "defaultHeight": 750
+    }
+  ]
+}
