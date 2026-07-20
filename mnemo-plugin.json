@@ -4,6 +4,7 @@
   "version": "2.0.0",
   "vendor": "Mnemosyne Labs",
   "category": "Productivity",
+  "icon": "icon.svg",
   "keywords": [
     "restaurant",
     "pos",
