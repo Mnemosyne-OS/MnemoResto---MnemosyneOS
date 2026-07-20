@@ -5,6 +5,7 @@
   "vendor": "Mnemosyne Labs",
   "category": "Productivity",
   "icon": "icon.svg",
+  "repository": "https://github.com/yaka0007/MnemoResto---MnemosyneOS",
   "keywords": [
     "restaurant",
     "pos",
@@ -15,6 +16,11 @@
     "menu"
   ],
   "description": "MnemoResto — le restaurant qui n'oublie aucun client. Tableau de bord, plan de salle, réservations, CRM avec fidélité, serveurs et pourboires, menu, formules, TVA par produit, stock, caisse et facturation. Interface EN/FR/ES synchronisée avec Mnemosyne OS.",
+  "descriptionI18n": {
+    "fr": "MnemoResto — le restaurant qui n'oublie aucun client. Tableau de bord, plan de salle, réservations, CRM avec fidélité, serveurs et pourboires, menu, formules, TVA par produit, stock, caisse et facturation. Interface EN/FR/ES synchronisée avec Mnemosyne OS.",
+    "en": "MnemoResto — the restaurant that never forgets a guest. Dashboard, floor plan, reservations, loyalty CRM, servers and tips, menu, combos, per-item VAT, stock, POS and invoicing. EN/FR/ES interface synced with Mnemosyne OS.",
+    "es": "MnemoResto — el restaurante que no olvida a ningún cliente. Panel, plano de sala, reservas, CRM con fidelización, camareros y propinas, menú, combos, IVA por producto, stock, TPV y facturación. Interfaz EN/FR/ES sincronizada con Mnemosyne OS."
+  },
   "permissions": [
     "vault:read",
     "vault:write",
