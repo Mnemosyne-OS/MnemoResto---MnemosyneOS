@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import { Database, Download, Globe, Info, Store, Trash2, Upload } from 'lucide-react';
 import { LANGUAGES, useI18n, type LangMode } from '../i18n';
-import { CURRENCIES } from '../format';
+import { COMMON_CURRENCIES, CURRENCIES, currencyLabel } from '../format';
 import type { Settings } from '../types';
 
-const APP_VERSION = '2.0.0';
+const APP_VERSION = '2.1.0';
 
 export function SettingsPage({
   settings,
@@ -25,7 +25,7 @@ export function SettingsPage({
   onImportBackup: (raw: string) => boolean;
   askConfirm: (message: string, onConfirm: () => void, danger?: boolean) => void;
 }) {
-  const { t, langMode, setLangMode } = useI18n();
+  const { t, lang, langMode, setLangMode } = useI18n();
   const [notice, setNotice] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -106,7 +106,16 @@ export function SettingsPage({
               value={settings.currency}
               onChange={(e) => onUpdateSettings({ currency: e.target.value })}
             >
-              {CURRENCIES.map((cur) => <option key={cur} value={cur}>{cur}</option>)}
+              <optgroup label={t('settings.currencyCommon')}>
+                {COMMON_CURRENCIES.map((cur) => (
+                  <option key={cur} value={cur}>{currencyLabel(cur, lang)}</option>
+                ))}
+              </optgroup>
+              <optgroup label={t('settings.currencyAll')}>
+                {CURRENCIES.map((cur) => (
+                  <option key={cur} value={cur}>{currencyLabel(cur, lang)}</option>
+                ))}
+              </optgroup>
             </select>
           </div>
           <div className="rest-field">

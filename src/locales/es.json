@@ -232,6 +232,8 @@
   "settings.profile": "Perfil del restaurante",
   "settings.restaurantName": "Nombre del restaurante",
   "settings.currency": "Moneda",
+  "settings.currencyCommon": "Habituales",
+  "settings.currencyAll": "Todas las monedas",
   "settings.vatRate": "Tipo de IVA por defecto (%)",
   "settings.loyalty": "Programa de fidelidad",
   "settings.loyaltyEnabled": "Activar el programa de fidelidad",

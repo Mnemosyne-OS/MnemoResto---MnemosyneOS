@@ -232,6 +232,8 @@
   "settings.profile": "Restaurant profile",
   "settings.restaurantName": "Restaurant name",
   "settings.currency": "Currency",
+  "settings.currencyCommon": "Common",
+  "settings.currencyAll": "All currencies",
   "settings.vatRate": "Default VAT rate (%)",
   "settings.loyalty": "Loyalty program",
   "settings.loyaltyEnabled": "Enable the loyalty program",

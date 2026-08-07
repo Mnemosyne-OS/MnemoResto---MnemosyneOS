@@ -1,7 +1,7 @@
 {
   "name": "@mnemosyne-plugins/mnemo-resto",
   "displayName": "MnemoResto",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "vendor": "Mnemosyne Labs",
   "category": "Productivity",
   "icon": "icon.svg",
