@@ -4,7 +4,7 @@ import { LANGUAGES, useI18n, type LangMode } from '../i18n';
 import { COMMON_CURRENCIES, CURRENCIES, currencyLabel } from '../format';
 import type { Settings } from '../types';
 
-const APP_VERSION = '2.1.0';
+const APP_VERSION = '2.1.1';
 
 export function SettingsPage({
   settings,
