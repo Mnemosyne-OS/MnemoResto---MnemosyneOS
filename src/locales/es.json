@@ -206,7 +206,7 @@
   "receipt.total": "TOTAL",
   "receipt.paidBy": "Pagado con {{method}}",
   "receipt.paid": "✓ Pagado",
-  "receipt.tagline": "Sovereign Dining Experience",
+  "receipt.tagline": "Experiencia gastronómica soberana",
 
   "dashboard.revenueToday": "Ingresos de hoy",
   "dashboard.invoicesToday": "Facturas de hoy",

@@ -1,7 +1,7 @@
 {
   "name": "@mnemosyne-plugins/mnemo-resto",
   "displayName": "MnemoResto",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "vendor": "Mnemosyne Labs",
   "category": "Productivity",
   "icon": "icon.svg",
@@ -39,5 +39,381 @@
       "defaultWidth": 1000,
       "defaultHeight": 750
     }
-  ]
+  ],
+  "agentActions": [
+    {
+      "id": "tables",
+      "summary": "The dining room right now: each table's status (vacant, occupied, reserved, billed), seats, guest, waiter, reservation time and what is on order.",
+      "effect": "read",
+      "params": {}
+    },
+    {
+      "id": "clients",
+      "summary": "List or search the restaurant's clients: phone, email, allergies, preferences, favourite table, visits, loyalty points.",
+      "details": "query matches every word in the name, phone, email, allergies or preferences, accents ignored.",
+      "effect": "read",
+      "params": {
+        "query": {
+          "type": "string",
+          "description": "Words to look for; empty = every client.",
+          "maxLength": 200
+        },
+        "limit": {
+          "type": "number",
+          "description": "How many (default 50).",
+          "minimum": 1,
+          "maximum": 500
+        }
+      }
+    },
+    {
+      "id": "menu",
+      "summary": "The dishes on the menu with their category and price.",
+      "effect": "read",
+      "params": {}
+    },
+    {
+      "id": "stock",
+      "summary": "The ingredients in stock with their quantity, unit and alert threshold, and which ones are running low.",
+      "effect": "read",
+      "params": {}
+    },
+    {
+      "id": "openTab",
+      "summary": "Show one tab of MnemoResto on the person's screen (dashboard, floor plan, clients, staff, menu, stock, till, invoices, settings).",
+      "effect": "write",
+      "params": {
+        "tab": {
+          "type": "string",
+          "description": "The tab.",
+          "enum": [
+            "dashboard",
+            "floor",
+            "crm",
+            "staff",
+            "menu",
+            "inventory",
+            "billing",
+            "invoices",
+            "settings"
+          ]
+        }
+      },
+      "required": [
+        "tab"
+      ]
+    },
+    {
+      "id": "addClient",
+      "summary": "Add a client to the restaurant's book, as the client form does, with allergies and preferences; their card shows in the Clients tab.",
+      "effect": "write",
+      "params": {
+        "name": {
+          "type": "string",
+          "description": "Their name.",
+          "maxLength": 200
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone.",
+          "maxLength": 60
+        },
+        "email": {
+          "type": "string",
+          "description": "Email.",
+          "maxLength": 200
+        },
+        "allergies": {
+          "type": "list",
+          "description": "Allergies, one per item.",
+          "maxItems": 30
+        },
+        "preferences": {
+          "type": "string",
+          "description": "Tastes and habits.",
+          "maxLength": 1000
+        },
+        "favTable": {
+          "type": "string",
+          "description": "Their favourite table.",
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    {
+      "id": "updateClient",
+      "summary": "Change a client's phone, email, allergies, preferences or favourite table, as the client form does.",
+      "details": "Only the fields passed change; allergies replaces the whole list.",
+      "effect": "write",
+      "params": {
+        "clientId": {
+          "type": "string",
+          "description": "The client, by name as the person says it, or id.",
+          "maxLength": 200
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone.",
+          "maxLength": 60
+        },
+        "email": {
+          "type": "string",
+          "description": "Email.",
+          "maxLength": 200
+        },
+        "allergies": {
+          "type": "list",
+          "description": "Allergies, one per item.",
+          "maxItems": 30
+        },
+        "preferences": {
+          "type": "string",
+          "description": "Tastes and habits.",
+          "maxLength": 1000
+        },
+        "favTable": {
+          "type": "string",
+          "description": "Their favourite table.",
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "clientId"
+      ]
+    },
+    {
+      "id": "restock",
+      "summary": "Add (or take out) stock of an ingredient, as the stock form does; a new ingredient is created with its unit.",
+      "details": "An ingredient of the same name (any case), or the one ingredient the words name (« farine » for « Farine T55 »), gets the quantity added; several are refused (AMBIGUOUS); stock never goes below 0. unit is needed only for a new one. minThreshold left out (or 0) keeps the current threshold; a new ingredient gets 2, as the form does.",
+      "effect": "write",
+      "params": {
+        "name": {
+          "type": "string",
+          "description": "The ingredient.",
+          "maxLength": 200
+        },
+        "quantity": {
+          "type": "number",
+          "description": "How much to add (negative takes it out).",
+          "minimum": -100000,
+          "maximum": 100000
+        },
+        "unit": {
+          "type": "string",
+          "description": "pcs, kg, L... (new ingredient only).",
+          "maxLength": 20
+        },
+        "minThreshold": {
+          "type": "number",
+          "description": "Alert when stock is at or below this.",
+          "minimum": 0,
+          "maximum": 100000
+        }
+      },
+      "required": [
+        "name",
+        "quantity"
+      ]
+    },
+    {
+      "id": "showTable",
+      "summary": "Show a table on the floor plan, selected as a click does, and answer its status, guest, waiter, reservation time and order.",
+      "effect": "write",
+      "params": {
+        "table": {
+          "type": "string",
+          "description": "The table, as the person says it (« table 4 », « la 4 ») or its id.",
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "table"
+      ]
+    },
+    {
+      "id": "setTable",
+      "summary": "Change a table on the floor plan, as its pickers do: status (vacant, occupied, reserved), its waiter, its seats.",
+      "details": "Only what is passed changes. Leaving « reserved » drops the arrival time, as the floor plan does. A table waiting for its bill (billed) is changed at the till, never here.",
+      "effect": "write",
+      "params": {
+        "table": {
+          "type": "string",
+          "description": "The table, as the person says it or its id.",
+          "maxLength": 100
+        },
+        "status": {
+          "type": "string",
+          "description": "The new status.",
+          "enum": [
+            "vacant",
+            "occupied",
+            "reserved"
+          ]
+        },
+        "server": {
+          "type": "string",
+          "description": "The waiter who covers it, by name.",
+          "maxLength": 100
+        },
+        "capacity": {
+          "type": "number",
+          "description": "How many seats.",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "table"
+      ]
+    },
+    {
+      "id": "showDish",
+      "summary": "Show the menu tab and answer one dish: category, price and its recipe (each ingredient, quantity and what is in stock).",
+      "effect": "write",
+      "params": {
+        "dish": {
+          "type": "string",
+          "description": "The dish, as the person says it, or its id.",
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "dish"
+      ]
+    },
+    {
+      "id": "editDish",
+      "summary": "Change a dish's price, name or category, as the menu form does; its recipe and VAT stay.",
+      "details": "Only what is passed changes. The price is in the restaurant's currency, rounded to the cent.",
+      "effect": "write",
+      "params": {
+        "dish": {
+          "type": "string",
+          "description": "The dish, as the person says it, or its id.",
+          "maxLength": 200
+        },
+        "price": {
+          "type": "number",
+          "description": "The new price.",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "name": {
+          "type": "string",
+          "description": "The new name.",
+          "maxLength": 200
+        },
+        "category": {
+          "type": "string",
+          "description": "The new category (Starters, Mains...).",
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "dish"
+      ]
+    },
+    {
+      "id": "showClient",
+      "summary": "Open a client's card in the Clients tab, as a click in the list does, and answer it (allergies, preferences, favourite table, visits, points).",
+      "effect": "write",
+      "params": {
+        "client": {
+          "type": "string",
+          "description": "The client, by name as the person says it (« Dupont », « Jean Dupont »), or id.",
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "client"
+      ]
+    },
+    {
+      "id": "addServer",
+      "summary": "Add a waiter to the staff, as the staff form does.",
+      "effect": "write",
+      "params": {
+        "name": {
+          "type": "string",
+          "description": "Their name.",
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    {
+      "id": "setSettings",
+      "summary": "Change the restaurant's name or turn the loyalty programme on or off, as the settings page does.",
+      "effect": "write",
+      "params": {
+        "restaurantName": {
+          "type": "string",
+          "description": "The restaurant's name.",
+          "maxLength": 200
+        },
+        "loyaltyEnabled": {
+          "type": "boolean",
+          "description": "Loyalty points on or off."
+        }
+      }
+    },
+    {
+      "id": "showCopilot",
+      "summary": "Show or hide the AI copilot panel (it does nothing until the person writes in it).",
+      "effect": "write",
+      "params": {
+        "open": {
+          "type": "boolean",
+          "description": "true shows it, false hides it."
+        }
+      },
+      "required": [
+        "open"
+      ]
+    },
+    {
+      "id": "closeView",
+      "summary": "Close what is open: the invoice shown on top, else the selected table or client card.",
+      "details": "A confirmation box stays open: it is the person's to answer.",
+      "effect": "write",
+      "params": {}
+    }
+  ],
+  "agentGuide": [
+    "Name a table, a dish, a client or a waiter the way the person says it (« la table 4 », « le tiramisu », « Dupont »): MnemoResto finds it by its words. Several matches are refused with their names (AMBIGUOUS): pick one and call again.",
+    "To look at something: openTab for a screen (dashboard = the day's view), showTable, showDish (with its recipe), showClient, closeView to close.",
+    "A new price: editDish. A table free, seated or reserved, its waiter: setTable. A delivery or what ran out: restock (negative takes out).",
+    "Orders, bills, payments and invoices are the person's, at the till: there is no action for them."
+  ],
+  "voiceCommands": {
+    "fr": [
+      "montre-moi la table quatre",
+      "mets Léa sur la table cinq",
+      "montre-moi la recette du tiramisu",
+      "passe le bœuf bourguignon à 18 euros",
+      "ouvre la fiche de Jean Dupont",
+      "ferme ça"
+    ],
+    "en": [
+      "show me table four",
+      "put Léa on table five",
+      "show me the tiramisu recipe",
+      "set the beef bourguignon to 18 euros",
+      "open Jean Dupont’s card",
+      "close that"
+    ],
+    "es": [
+      "muéstrame la mesa cuatro",
+      "pon a Léa en la mesa cinco",
+      "muéstrame la receta del tiramisú",
+      "pon el bœuf bourguignon a 18 euros",
+      "abre la ficha de Jean Dupont",
+      "cierra eso"
+    ]
+  }
 }

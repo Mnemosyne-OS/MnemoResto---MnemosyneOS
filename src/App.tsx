@@ -46,6 +46,7 @@ import { InvoicesView } from './components/InvoicesView';
 import { SettingsPage } from './components/SettingsPage';
 import { AiCopilot } from './components/AiCopilot';
 import { InvoiceModal } from './components/InvoiceModal';
+import { RestoAgentActions } from './components/RestoAgentActions';
 import './RestaurantManager.css';
 
 // Initialize the SDK with the unique cartridge ID
@@ -218,9 +219,11 @@ export default function App() {
   };
 
   // ── CRM ACTIONS ─────────────────────────────────────────────────────────
-  const saveClient = (form: Partial<Client>, editingId: string | null) => {
+  /** Answers the client's id (the agent door reports it, doc 149); the form ignores it. */
+  const saveClient = (form: Partial<Client>, editingId: string | null): string => {
     if (editingId) {
       setClients((prev) => prev.map((c) => (c.id === editingId ? ({ ...c, ...form } as Client) : c)));
+      return editingId;
     } else {
       const newClient: Client = {
         id: newId('c_'),
@@ -236,6 +239,7 @@ export default function App() {
       };
       setClients((prev) => [...prev, newClient]);
       setSelectedClientId(newClient.id);
+      return newClient.id;
     }
   };
 
@@ -659,6 +663,32 @@ Always answer in ${LANGUAGES[lang].label}.`;
 
   return (
     <div className="rest-container">
+      <RestoAgentActions
+        tables={tables}
+        clients={clients}
+        menu={menu}
+        ingredients={ingredients}
+        servers={servers}
+        settings={settings}
+        currency={settings.currency}
+        activeTab={activeTab}
+        setTab={setActiveTab}
+        saveClient={saveClient}
+        saveStockEntry={saveStockEntry}
+        showClient={(id) => { setSelectedClientId(id); setActiveTab('crm'); }}
+        saveMenuItem={saveMenuItem}
+        updateTables={setTables}
+        selectTable={setSelectedTableId}
+        selectClient={setSelectedClientId}
+        addServer={addServer}
+        updateSettings={(patch) => setSettings((prev) => ({ ...prev, ...patch }))}
+        selectedTableId={selectedTableId}
+        selectedClientId={selectedClientId}
+        invoiceOpen={activeInvoice !== null}
+        closeInvoice={() => setActiveInvoice(null)}
+        copilotOpen={showAICopilot}
+        setCopilot={setShowAICopilot}
+      />
       {/* HEADER */}
       <header className="rest-header">
         <div className="rest-logo-group">

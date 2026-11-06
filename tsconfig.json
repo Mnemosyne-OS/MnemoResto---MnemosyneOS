@@ -20,5 +20,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  /* The tests import vitest, which this cartridge does not install yet: the
+     shipping build must not depend on it. They run with a sibling cartridge's
+     vitest (see src/agent.test.ts). */
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
 }
